@@ -5,7 +5,7 @@
 
 You should install [MongoDB](https://docs.mongodb.com/manual/administration/install-community/) on your local machine, or use other services such as [mLab](https://mlab.com/) or [Compose](https://www.compose.com/compare/mongodb)
 
-After that, you will have to replace the mongoURL with your MongoDB address in *src/config/database.js*
+After that, you will have to replace the MONGO_URL with your MongoDB address in *src/config/constants.js*
 
 ## Clone this repository
 
