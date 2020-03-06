@@ -1,0 +1,1324 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Api documentation for GooSendr. A logistics application.<br><br><br> <b>NEW</b><br> 1. Removal of username field <br> 2. Addition of the courier api<br><br>",
+    "version": "1.0.0",
+    "title": "GooSendr Api Documentation",
+    "termsOfService": "",
+    "customeSiteTitle": "GooSendr Api Docs",
+    "contact": {
+      "email": "aditech5170@gmail.com"
+    }
+  },
+  "host": "52.14.168.100:3000",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "user",
+      "description": "",
+      "externalDocs": {
+        "description": "",
+        "url": "http://52.14.168.100:3000"
+      }
+    },
+    {
+      "name": "courier",
+      "externalDocs": {
+        "description": "",
+        "url": "http://52.14.168.100:3000"
+      }
+    },
+    {
+      "name": "user address book",
+      "externalDocs": {
+        "description": "",
+        "url": "http://52.14.168.100:3000/address"
+      }
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/user/register": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create user",
+        "description": "Registering a new user.",
+        "operationId": "createUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/registration.model"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/auth.model"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/user/resend/{id}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Resend sms auth-token",
+        "description": "",
+        "operationId": "resend",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "id of registered user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": ""
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        }
+      }
+    },
+    "/user/verify/{id}": {
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Send verification code",
+        "description": "",
+        "operationId": "verify",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "id of registered user",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "code received on phone",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/verificationCode.model"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/auth.model"
+            }
+          },
+          "400": {
+            "description": "invalid code"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Logs user into the system",
+        "description": "",
+        "operationId": "loginUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "user login information",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/login.model"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/auth.model"
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        }
+      }
+    },
+    "/user/forgot-password": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Forgot password",
+        "description": "",
+        "operationId": "forgotPassword",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The user email registered in the system. ",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/forgotPassword.model"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "UNAUTHORIZED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        }
+      }
+    },
+    "/user/reset-password": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Reset password with token from user's email",
+        "description": "",
+        "operationId": "resetPassword",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Token and Password",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/resetPassword.model"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": ""
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        }
+      }
+    },
+    "/user/change-password": {
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Changing of password",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "changePassword",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/changePassword.model"
+            }
+          }
+        ],
+        "security": [
+          {
+            "userToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "invalid old password"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        }
+      }
+    },
+    "/user/update-user": {
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Update user Information",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "updateUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/updateInfo.model"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/info.model"
+            }
+          },
+          "400": {
+            "description": ""
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/courier/register": {
+      "post": {
+        "tags": [
+          "courier"
+        ],
+        "summary": "Create user",
+        "description": "Registering a new user.",
+        "operationId": "createCourierUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/courierRegistration.model"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/courierAuth.model"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/courier/resend/{id}": {
+      "get": {
+        "tags": [
+          "courier"
+        ],
+        "summary": "Resend sms auth-token",
+        "description": "",
+        "operationId": "courierResend",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "id of registered user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": ""
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        }
+      }
+    },
+    "/courier/verify/{id}": {
+      "put": {
+        "tags": [
+          "courier"
+        ],
+        "summary": "Send verification code",
+        "description": "",
+        "operationId": "courierVerify",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "id of registered user",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "code received on phone",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/verificationCode.model"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/courierAuth.model"
+            }
+          },
+          "400": {
+            "description": "invalid code"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        }
+      }
+    },
+    "/courier/resend-email/{id}": {
+      "get": {
+        "tags": [
+          "courier"
+        ],
+        "summary": "Resend email for confirmation",
+        "description": "",
+        "operationId": "courierResendEmail",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "id of registered user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": ""
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        }
+      }
+    },
+    "/courier/confirm-email/{id}": {
+      "put": {
+        "tags": [
+          "courier"
+        ],
+        "summary": "Send verification code",
+        "description": "",
+        "operationId": "courierConfirmEmail",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "id of registered user",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "code received on phone",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/emailconfimation.model"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/courierInfo.model"
+            }
+          },
+          "400": {
+            "description": "invalid code"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        }
+      }
+    },
+    "/courier/login": {
+      "post": {
+        "tags": [
+          "courier"
+        ],
+        "summary": "Logs courier into the system",
+        "description": "",
+        "operationId": "loginCourier",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "user login information",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/login.model"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/courierAuth.model"
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        }
+      }
+    },
+    "/courier/forgot-password": {
+      "post": {
+        "tags": [
+          "courier"
+        ],
+        "summary": "Forgot password",
+        "description": "",
+        "operationId": "courierForgotPassword",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The user email registered in the system. ",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/forgotPassword.model"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "UNAUTHORIZED"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        }
+      }
+    },
+    "/courier/reset-password": {
+      "post": {
+        "tags": [
+          "courier"
+        ],
+        "summary": "Reset password with token from user's email",
+        "description": "",
+        "operationId": "courierResetPassword",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Token and Password",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/resetPassword.model"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": ""
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        }
+      }
+    },
+    "/courier/change-password": {
+      "patch": {
+        "tags": [
+          "courier"
+        ],
+        "summary": "Changing of password",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "courierChangePassword",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/changePassword.model"
+            }
+          }
+        ],
+        "security": [
+          {
+            "courierToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "invalid old password"
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        }
+      }
+    },
+    "/courier/update-user": {
+      "patch": {
+        "tags": [
+          "courier"
+        ],
+        "summary": "Update courier Information",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "courierUpdateUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/courierUpdateInfo.model"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/courierInfo.model"
+            }
+          },
+          "400": {
+            "description": ""
+          },
+          "401": {
+            "description": "UNAUTHORIZED"
+          }
+        },
+        "security": [
+          {
+            "courierToken": []
+          }
+        ]
+      }
+    },
+    "/address": {
+      "post": {
+        "tags": [
+          "user address book"
+        ],
+        "summary": "Add new address",
+        "description": "auto populate the name, phone number and countryCode fields with the details from the <b>logged in</b> user. those fields can be changed by the user per address",
+        "operationId": "register Address",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "address object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/address.model"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/addressOutput.model"
+            }
+          },
+          "400": {
+            "description": "UNAUTHORIZED"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "user address book"
+        ],
+        "summary": "get user addresses",
+        "description": "",
+        "operationId": "getAddresses",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "description": "page",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "limit",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/addressOutput2.model"
+            }
+          },
+          "400": {
+            "description": "UNAUTHORIZED"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/address/{id}": {
+      "get": {
+        "tags": [
+          "user address book"
+        ],
+        "summary": "get user individual address",
+        "description": "",
+        "operationId": "getAddress",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "id of registered user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/addressOutput.model"
+            }
+          },
+          "400": {
+            "description": "UNAUTHORIZED"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "user address book"
+        ],
+        "summary": "update individual address",
+        "description": "",
+        "operationId": "updateAddress",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "id of registered user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/addressOutput.model"
+            }
+          },
+          "400": {
+            "description": "UNAUTHORIZED"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "user address book"
+        ],
+        "summary": "delete individual address",
+        "description": "",
+        "operationId": "delete_Address",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "id of registered user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "UNAUTHORIZED"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "userToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    },
+    "courierToken": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "registration.model": {
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "eg +233"
+        },
+        "avatar": {
+          "type": "object"
+        }
+      }
+    },
+    "courierRegistration.model": {
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "eg +233"
+        },
+        "address1": {
+          "type": "string"
+        },
+        "address2": {
+          "type": "string",
+          "description": "optional"
+        },
+        "avatar": {
+          "type": "object"
+        }
+      }
+    },
+    "updateInfo.model": {
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "facebook": {
+          "type": "object"
+        },
+        "google": {
+          "type": "object"
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "eg +233"
+        },
+        "avatar": {
+          "type": "object"
+        }
+      }
+    },
+    "courierUpdateInfo.model": {
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "address1": {
+          "type": "string"
+        },
+        "address2": {
+          "type": "string",
+          "description": "optional"
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "eg +233"
+        },
+        "avatar": {
+          "type": "object"
+        }
+      }
+    },
+    "info.model": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "facebook": {
+          "type": "object"
+        },
+        "google": {
+          "type": "object"
+        },
+        "avatar": {
+          "type": "object"
+        }
+      }
+    },
+    "courierInfo.model": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "address1": {
+          "type": "string"
+        },
+        "address2": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "object"
+        }
+      }
+    },
+    "auth.model": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "facebook": {
+          "type": "object"
+        },
+        "google": {
+          "type": "object"
+        },
+        "avatar": {
+          "type": "object"
+        },
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "courierAuth.model": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "address1": {
+          "type": "string"
+        },
+        "address2": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "object"
+        },
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "verificationCode.model": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        }
+      }
+    },
+    "emailconfimation.model": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "resetPassword.model": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        },
+        "verifyPassword": {
+          "type": "string"
+        }
+      }
+    },
+    "changePassword.model": {
+      "type": "object",
+      "properties": {
+        "newPassword": {
+          "type": "string"
+        },
+        "oldPassword": {
+          "type": "string"
+        }
+      }
+    },
+    "login.model": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "forgotPassword.model": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "address.model": {
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string"
+        },
+        "address1": {
+          "type": "string"
+        },
+        "address2": {
+          "type": "string"
+        },
+        "district": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "countryCode": {
+          "type": "string"
+        },
+        "phone2": {
+          "type": "string"
+        },
+        "countryCode2": {
+          "type": "string"
+        }
+      }
+    },
+    "addressOutput.model": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "address1": {
+          "type": "string"
+        },
+        "address2": {
+          "type": "string"
+        },
+        "district": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "countryCode": {
+          "type": "string"
+        },
+        "phone2": {
+          "type": "string"
+        },
+        "countryCode2": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "user": {
+          "type": "object"
+        }
+      }
+    },
+    "addressOutput2.model": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "address1": {
+            "type": "string"
+          },
+          "address2": {
+            "type": "string"
+          },
+          "district": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "countryCode": {
+            "type": "string"
+          },
+          "phone2": {
+            "type": "string"
+          },
+          "countryCode2": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}
